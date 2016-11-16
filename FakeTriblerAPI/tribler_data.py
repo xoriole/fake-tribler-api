@@ -46,6 +46,7 @@ class TriblerData:
                 "lt_proxyserver": None,
                 "lt_proxyauth": None,
                 "utp": True,
+                "max_connections_download": 5,
             },
             "Tribler": {
                 "saveas": "/Users/tribleruser/downloads",
@@ -72,6 +73,9 @@ class TriblerData:
             "tunnel_community": {
                 "exitnode_enabled": True,
             },
+            "search_community": {
+                "enabled": True,
+            }
         }}
 
     # Generate channels from the random_channels file

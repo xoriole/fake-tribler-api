@@ -30,22 +30,6 @@ class DownloadsEndpoint(resource.Resource):
         request_data = cgi.FieldStorage(fp=request.content, headers=headers,
                                         environ={'REQUEST_METHOD': 'POST', 'CONTENT_TYPE': headers['content-type']})
 
-        if 'source' not in request_data:
-            request.setResponseCode(http.BAD_REQUEST)
-            return json.dumps({"error": "source parameter missing"})
-
-        if request_data['source'].value not in ['file', 'url']:
-            request.setResponseCode(http.BAD_REQUEST)
-            return json.dumps({"error": "source parameter should be either file or url"})
-
-        if request_data['source'].value == 'url' and 'url' not in request_data:
-            request.setResponseCode(http.BAD_REQUEST)
-            return json.dumps({"error": "url parameter missing"})
-
-        if request_data['source'].value == 'file' and 'file' not in request_data:
-            request.setResponseCode(http.BAD_REQUEST)
-            return json.dumps({"error": "file parameter missing"})
-
         # Just start a fake download
         tribler_utils.tribler_data.start_random_download()
 
@@ -58,10 +42,27 @@ class DownloadEndpoint(resource.Resource):
         resource.Resource.__init__(self)
         self.infohash = infohash
 
-        self.putChild("remove", DownloadRemoveEndpoint(self.infohash))
-        self.putChild("stop", DownloadStopEndpoint(self.infohash))
-        self.putChild("resume", DownloadResumeEndpoint(self.infohash))
-        self.putChild("forcerecheck", DownloadForceRecheckEndpoint(self.infohash))
+    def render_PATCH(self, request):
+        download = tribler_utils.tribler_data.get_download_with_infohash(self.infohash)
+        parameters = http.parse_qs(request.content.read(), 1)
+
+        if 'selected_files[]' in parameters:
+            selected_files_list = [unicode(f, 'utf-8') for f in parameters['selected_files[]']]
+            download.set_selected_files(selected_files_list)
+
+        if 'state' in parameters and len(parameters['state']) > 0:
+            state = parameters['state'][0]
+            if state == "resume":
+                download.status = 3
+            elif state == "stop":
+                download.status = 5
+            elif state == "recheck":
+                download.status = 2
+            else:
+                request.setResponseCode(http.BAD_REQUEST)
+                return json.dumps({"error": "unknown state parameter"})
+
+        return json.dumps({"modified": True})
 
 
 class DownloadBaseEndpoint(resource.Resource):
@@ -77,60 +78,3 @@ class DownloadBaseEndpoint(resource.Resource):
         """
         request.setResponseCode(http.NOT_FOUND)
         return json.dumps({"error": message})
-
-
-class DownloadRemoveEndpoint(DownloadBaseEndpoint):
-
-    def render_DELETE(self, request):
-        request.setHeader('Content-Type', 'text/json')
-        download = tribler_utils.tribler_data.get_download_with_infohash(self.infohash)
-        if download is None:
-            DownloadRemoveEndpoint.return_404(request)
-
-        parameters = http.parse_qs(request.content.read(), 1)
-        if 'remove_data' not in parameters or len(parameters['remove_data']) == 0:
-            request.setResponseCode(http.BAD_REQUEST)
-            return json.dumps({"error": "remove_data parameter missing"})
-
-        tribler_utils.tribler_data.downloads.remove(download)
-
-        return json.dumps({"removed": True})
-
-
-class DownloadResumeEndpoint(DownloadBaseEndpoint):
-
-    def render_POST(self, request):
-        request.setHeader('Content-Type', 'text/json')
-        download = tribler_utils.tribler_data.get_download_with_infohash(self.infohash)
-        if download is None:
-            DownloadResumeEndpoint.return_404(request)
-
-        download.status = 3
-
-        return json.dumps({"resumed": True})
-
-
-class DownloadStopEndpoint(DownloadBaseEndpoint):
-
-    def render_POST(self, request):
-        request.setHeader('Content-Type', 'text/json')
-        download = tribler_utils.tribler_data.get_download_with_infohash(self.infohash)
-        if download is None:
-            DownloadRemoveEndpoint.return_404(request)
-
-        download.status = 5
-
-        return json.dumps({"stopped": True})
-
-
-class DownloadForceRecheckEndpoint(DownloadBaseEndpoint):
-
-    def render_POST(self, request):
-        request.setHeader('Content-Type', 'text/json')
-        download = tribler_utils.tribler_data.get_download_with_infohash(self.infohash)
-        if download is None:
-            DownloadRemoveEndpoint.return_404(request)
-
-        download.status = 2
-
-        return json.dumps({"forcedrecheck": True})

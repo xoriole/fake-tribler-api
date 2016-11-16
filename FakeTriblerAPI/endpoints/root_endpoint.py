@@ -8,6 +8,7 @@ from FakeTriblerAPI.endpoints.mychannel_endpoint import MyChannelEndpoint
 from FakeTriblerAPI.endpoints.search_endpoint import SearchEndpoint
 from FakeTriblerAPI.endpoints.state_endpoint import StateEndpoint
 from FakeTriblerAPI.endpoints.statistics_endpoint import StatisticsEndpoint
+from FakeTriblerAPI.endpoints.torrentinfo_endpoint import TorrentInfoEndpoint
 from FakeTriblerAPI.endpoints.torrents_endpoint import TorrentsEndpoint
 from FakeTriblerAPI.endpoints.variables_endpoint import VariablesEndpoint
 from FakeTriblerAPI.endpoints.settings_endpoint import SettingsEndpoint
@@ -28,7 +29,7 @@ class RootEndpoint(resource.Resource):
                               "settings": SettingsEndpoint, "variables": VariablesEndpoint,
                               "downloads": DownloadsEndpoint, "torrents": TorrentsEndpoint,
                               "multichain": MultichainEndpoint, "statistics": StatisticsEndpoint,
-                              "state": StateEndpoint}
+                              "state": StateEndpoint, "torrentinfo": TorrentInfoEndpoint}
 
         for path, child_cls in child_handler_dict.iteritems():
             self.putChild(path, child_cls())

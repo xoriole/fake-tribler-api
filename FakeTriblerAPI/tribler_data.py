@@ -33,6 +33,7 @@ class TriblerData:
         self.settings = {"settings": {
             "general": {
                 "family_filter": True,
+                "minport": 1234,
             },
             "video": {
                 "enabled": True,

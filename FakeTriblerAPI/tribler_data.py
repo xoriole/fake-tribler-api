@@ -72,6 +72,7 @@ class TriblerData:
             },
             "tunnel_community": {
                 "exitnode_enabled": True,
+                "pooled": False,
             },
             "search_community": {
                 "enabled": True,

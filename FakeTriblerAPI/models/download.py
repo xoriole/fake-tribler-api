@@ -18,6 +18,9 @@ class Download:
         self.progress = uniform(0, 1)
         self.down_speed = randint(0, 1000000)
         self.up_speed = randint(0, 1000000)
+        self.total_up = randint(0, 1000000)
+        self.total_down = randint(0, 1000000)
+        self.ratio = float(self.total_up) / float(self.total_down)
         self.files = []
         self.trackers = [{"url": "[PEX]", "status": "working", "peers": 42}]
         self.destination = "/"
@@ -54,7 +57,8 @@ class Download:
                     "size": self.torrent.length, "speed_down": self.down_speed, "speed_up": self.up_speed, "eta": 1234,
                     "hops": self.anon_hops, "anon_download": self.anon, "files": self.files, "trackers": self.trackers,
                     "destination": self.destination, "availability": self.availability,
-                    "total_pieces": self.total_pieces}
+                    "total_pieces": self.total_pieces, "total_up": self.total_up, "total_down": self.total_down,
+                    "ratio": self.ratio}
 
         if get_peers:
             download["peers"] = [peer.get_info_dict() for peer in self.peers]

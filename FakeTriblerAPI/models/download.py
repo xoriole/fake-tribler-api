@@ -28,6 +28,7 @@ class Download:
         self.peers = []
         self.total_pieces = randint(100, 2000)
         self.has_pieces = [False] * self.total_pieces
+        self.time_added = randint(1400000000, 1484819242)
 
         # Set some pieces to True
         for _ in xrange(self.total_pieces / 2):
@@ -58,7 +59,7 @@ class Download:
                     "hops": self.anon_hops, "anon_download": self.anon, "files": self.files, "trackers": self.trackers,
                     "destination": self.destination, "availability": self.availability,
                     "total_pieces": self.total_pieces, "total_up": self.total_up, "total_down": self.total_down,
-                    "ratio": self.ratio}
+                    "ratio": self.ratio, "error": "unknown", "time_added": self.time_added}
 
         if get_peers:
             download["peers"] = [peer.get_info_dict() for peer in self.peers]

@@ -1,6 +1,10 @@
+import base64
 import os
 from random import randint, sample
+from time import time
+
 import FakeTriblerAPI
+from FakeTriblerAPI.models.multichain_block import MultichainBlock
 from models.channel import Channel
 from models.download import Download
 from models.torrent import Torrent
@@ -20,6 +24,7 @@ class TriblerData:
         self.my_channel = -1
         self.rss_feeds = []
         self.settings = {}
+        self.multichain_blocks = []
 
     def generate(self):
         self.read_torrent_files()
@@ -28,6 +33,7 @@ class TriblerData:
         self.assign_subscribed_channels()
         self.generate_downloads()
         self.generate_rss_feeds()
+        self.generate_multichain_blocks()
 
         # Create settings
         self.settings = {"settings": {
@@ -152,3 +158,15 @@ class TriblerData:
     def generate_downloads(self):
         for _ in xrange(randint(10, 30)):
             self.start_random_download()
+
+    def generate_multichain_blocks(self):
+        # Generate a chain of 100 blocks
+        my_id = 'a' * 20
+        cur_timestamp = time() - 100 * 24 * 3600  # 100 days in the past
+        genesis = MultichainBlock(my_id=my_id, timestamp=cur_timestamp)
+        prev_block = genesis
+        for i in xrange(100):
+            cur_timestamp += 24 * 3600
+            new_block = MultichainBlock(my_id=my_id, timestamp=cur_timestamp, last_block=prev_block)
+            self.multichain_blocks.append(new_block)
+            prev_block = new_block

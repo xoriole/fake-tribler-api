@@ -1,5 +1,6 @@
 import base64
 import json
+from random import randint
 
 from twisted.web import resource
 
@@ -37,6 +38,8 @@ class MultichainStatsEndpoint(resource.Resource):
             "latest_block_down_mb": 85,
             "self_total_up_mb": last_block.total_up_requester
             if last_block.is_requester else last_block.total_up_responder,
+            "self_peers_helped": randint(10, 50),
+            "self_peers_helped_you": randint(10, 50),
             "latest_block_responder_id": "f83ldsmhqio"
         }})
 

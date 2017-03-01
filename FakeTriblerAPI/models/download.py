@@ -59,7 +59,7 @@ class Download:
                     "hops": self.anon_hops, "anon_download": self.anon, "files": self.files, "trackers": self.trackers,
                     "destination": self.destination, "availability": self.availability,
                     "total_pieces": self.total_pieces, "total_up": self.total_up, "total_down": self.total_down,
-                    "ratio": self.ratio, "error": "unknown", "time_added": self.time_added}
+                    "ratio": self.ratio, "error": "unknown", "time_added": self.time_added, "vod_mode": False}
 
         if get_peers:
             download["peers"] = [peer.get_info_dict() for peer in self.peers]

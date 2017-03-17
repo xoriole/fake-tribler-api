@@ -27,20 +27,13 @@ class MultichainStatsEndpoint(resource.Resource):
         last_block = tribler_utils.tribler_data.multichain_blocks[-1]
 
         return json.dumps({'statistics': {
-            "self_id": base64.encodestring('a' * 20).strip(),
-            "latest_block_insert_time": "2016-08-04 12:01:53",
-            "self_total_blocks": len(tribler_utils.tribler_data.multichain_blocks),
-            "latest_block_id": "32428fdsjkl3f3",
-            "latest_block_requester_id": "fdjklfdhfeek3",
-            "latest_block_up_mb": 34,
-            "self_total_down_mb": last_block.total_down_requester
-            if last_block.is_requester else last_block.total_down_responder,
-            "latest_block_down_mb": 85,
-            "self_total_up_mb": last_block.total_up_requester
-            if last_block.is_requester else last_block.total_up_responder,
-            "self_peers_helped": randint(10, 50),
-            "self_peers_helped_you": randint(10, 50),
-            "latest_block_responder_id": "f83ldsmhqio"
+            "id": ('a' * 20).encode("hex"),
+            "total_blocks": len(tribler_utils.tribler_data.multichain_blocks),
+            "total_down": last_block.total_down,
+            "total_up": last_block.total_up,
+            "peers_that_pk_helped": randint(10, 50),
+            "peers_that_helped_pk": randint(10, 50),
+            "latest_block": last_block.to_dictionary()
         }})
 
 class MultichainBlocksEndpoint(resource.Resource):

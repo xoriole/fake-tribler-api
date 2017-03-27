@@ -52,6 +52,8 @@ class TriblerData:
                 "lt_proxyserver": None,
                 "lt_proxyauth": None,
                 "utp": True,
+                "max_upload_rate": 100,
+                "max_download_rate": 200,
                 "max_connections_download": 5,
             },
             "Tribler": {

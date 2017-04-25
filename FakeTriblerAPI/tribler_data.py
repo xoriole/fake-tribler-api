@@ -165,10 +165,8 @@ class TriblerData:
         # Generate a chain of 100 blocks
         my_id = 'a' * 20
         cur_timestamp = time() - 100 * 24 * 3600  # 100 days in the past
-        genesis = MultichainBlock(my_id=my_id, timestamp=cur_timestamp)
-        prev_block = genesis
+        self.multichain_blocks.append(MultichainBlock(my_id=my_id, timestamp=cur_timestamp))
         for i in xrange(100):
             cur_timestamp += 24 * 3600
-            new_block = MultichainBlock(my_id=my_id, timestamp=cur_timestamp, last_block=prev_block)
-            self.multichain_blocks.append(new_block)
-            prev_block = new_block
+            self.multichain_blocks.append(MultichainBlock(my_id=my_id, timestamp=cur_timestamp, last_block=
+                                                          self.multichain_blocks[-1]))

@@ -5,6 +5,9 @@ from time import time
 
 import FakeTriblerAPI
 from FakeTriblerAPI.models.multichain_block import MultichainBlock
+from FakeTriblerAPI.models.order import Order
+from FakeTriblerAPI.models.tick import Tick
+from FakeTriblerAPI.models.transaction import Transaction
 from models.channel import Channel
 from models.download import Download
 from models.torrent import Torrent
@@ -25,6 +28,9 @@ class TriblerData:
         self.rss_feeds = []
         self.settings = {}
         self.multichain_blocks = []
+        self.order_book = {}
+        self.transactions = []
+        self.orders = []
 
     def generate(self):
         self.read_torrent_files()
@@ -34,6 +40,9 @@ class TriblerData:
         self.generate_downloads()
         self.generate_rss_feeds()
         self.generate_multichain_blocks()
+        self.generate_order_book()
+        self.generate_transactions()
+        self.generate_orders()
 
         # Create settings
         self.settings = {"settings": {
@@ -170,3 +179,15 @@ class TriblerData:
             cur_timestamp += 24 * 3600
             self.multichain_blocks.append(MultichainBlock(my_id=my_id, timestamp=cur_timestamp, last_block=
                                                           self.multichain_blocks[-1]))
+
+    def generate_order_book(self):
+        # Generate some ask/bid ticks
+        ask_ticks = [Tick('DUM1', 'DUM2', is_ask=True) for _ in xrange(randint(20, 50))]
+        bid_ticks = [Tick('DUM1', 'DUM2', is_ask=False) for _ in xrange(randint(20, 50))]
+        self.order_book = {'asks': ask_ticks, 'bids': bid_ticks}
+
+    def generate_transactions(self):
+        self.transactions = [Transaction('DUM1', 'DUM2') for _ in xrange(randint(20, 50))]
+
+    def generate_orders(self):
+        self.orders = [Order('DUM1', 'DUM2') for _ in xrange(randint(20, 50))]

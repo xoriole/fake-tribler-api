@@ -48,48 +48,40 @@ class TriblerData:
         self.settings = {"settings": {
             "general": {
                 "family_filter": True,
-                "minport": 1234,
             },
-            "video": {
+            "video_server": {
                 "enabled": True,
                 "port": "-1",
             },
             "libtorrent": {
                 "enabled": True,
                 "port": 1234,
-                "lt_proxytype": 0,
-                "lt_proxyserver": None,
-                "lt_proxyauth": None,
+                "proxy_type": 0,
+                "proxy_server": None,
+                "proxy_auth": None,
                 "utp": True,
                 "max_upload_rate": 100,
                 "max_download_rate": 200,
                 "max_connections_download": 5,
             },
-            "Tribler": {
-                "saveas": "/Users/tribleruser/downloads",
-                "showsaveas": 1,
-                "default_number_hops": 1,
-                "default_anonymity_enabled": True,
-                "default_safeseeding_enabled": True,
-                "maxuploadrate": 0,
-                "maxdownloadrate": 0,
-            },
             "watch_folder": {
                 "enabled": True,
-                "watch_folder_dir": "/Users/tribleruser/watchfolder",
+                "directory": "/Users/tribleruser/watchfolder",
             },
-            "downloadconfig": {
+            "download_defaults": {
                 "seeding_mode": "ratio",
                 "seeding_time": 60,
                 "seeding_ratio": 2.0,
                 "saveas": "bla",
+                "number_hops": 1,
+                "anonymity_enabled": True,
+                "safeseeding_enabled": True,
             },
             "multichain": {
                 "enabled": True,
             },
             "tunnel_community": {
                 "exitnode_enabled": True,
-                "pooled": False,
             },
             "search_community": {
                 "enabled": True,

@@ -4,7 +4,7 @@ from random import randint, sample
 from time import time
 
 import FakeTriblerAPI
-from FakeTriblerAPI.models.multichain_block import MultichainBlock
+from FakeTriblerAPI.models.trustchain_block import TrustchainBlock
 from FakeTriblerAPI.models.order import Order
 from FakeTriblerAPI.models.tick import Tick
 from FakeTriblerAPI.models.transaction import Transaction
@@ -27,7 +27,7 @@ class TriblerData:
         self.my_channel = -1
         self.rss_feeds = []
         self.settings = {}
-        self.multichain_blocks = []
+        self.trustchain_blocks = []
         self.order_book = {}
         self.transactions = []
         self.orders = []
@@ -39,7 +39,7 @@ class TriblerData:
         self.assign_subscribed_channels()
         self.generate_downloads()
         self.generate_rss_feeds()
-        self.generate_multichain_blocks()
+        self.generate_trustchain_blocks()
         self.generate_order_book()
         self.generate_transactions()
         self.generate_orders()
@@ -77,7 +77,7 @@ class TriblerData:
                 "anonymity_enabled": True,
                 "safeseeding_enabled": True,
             },
-            "multichain": {
+            "trustchain": {
                 "enabled": True,
             },
             "tunnel_community": {
@@ -162,15 +162,15 @@ class TriblerData:
         for _ in xrange(randint(10, 30)):
             self.start_random_download()
 
-    def generate_multichain_blocks(self):
+    def generate_trustchain_blocks(self):
         # Generate a chain of 100 blocks
         my_id = 'a' * 20
         cur_timestamp = time() - 100 * 24 * 3600  # 100 days in the past
-        self.multichain_blocks.append(MultichainBlock(my_id=my_id, timestamp=cur_timestamp))
+        self.trustchain_blocks.append(TrustchainBlock(my_id=my_id, timestamp=cur_timestamp))
         for i in xrange(100):
             cur_timestamp += 24 * 3600
-            self.multichain_blocks.append(MultichainBlock(my_id=my_id, timestamp=cur_timestamp, last_block=
-                                                          self.multichain_blocks[-1]))
+            self.trustchain_blocks.append(TrustchainBlock(my_id=my_id, timestamp=cur_timestamp, last_block=
+                                                          self.trustchain_blocks[-1]))
 
     def generate_order_book(self):
         # Generate some ask/bid ticks

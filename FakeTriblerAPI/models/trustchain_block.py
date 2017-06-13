@@ -3,7 +3,7 @@ from random import randint, choice, random
 import datetime
 
 
-class MultichainBlock:
+class TrustchainBlock:
 
     def __init__(self, my_id=None, timestamp=0, last_block=None):
         self.public_key = my_id
@@ -12,6 +12,7 @@ class MultichainBlock:
         self.down = randint(1024, 20 * 1024) * 1024
         self.total_up = (last_block.total_up if last_block else 0) + self.up
         self.total_down = (last_block.total_down if last_block else 0) + self.down
+        self.transaction = {"up": self.up, "down": self.down, "total_up": self.total_up, "total_down": self.total_down}
         self.link_public_key = 'b' * 20
         self.link_sequence_number = 0 if random() < 0.5 else randint(1, 1000)
         self.previous_hash = 'c' * 20
@@ -20,6 +21,7 @@ class MultichainBlock:
 
     def to_dictionary(self):
         return {
+            "transaction": self.transaction,
             "up": self.up,
             "down": self.down,
             "total_up": self.total_up,

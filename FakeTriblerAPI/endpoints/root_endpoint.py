@@ -1,6 +1,7 @@
 from twisted.web import resource
 
 from FakeTriblerAPI.endpoints.channels.channels_endpoint import ChannelsEndpoint
+from FakeTriblerAPI.endpoints.debug_endpoint import DebugEndpoint
 from FakeTriblerAPI.endpoints.downloads_endpoint import DownloadsEndpoint
 from FakeTriblerAPI.endpoints.events_endpoint import EventsEndpoint
 from FakeTriblerAPI.endpoints.multichain_endpoint import MultichainEndpoint
@@ -31,7 +32,7 @@ class RootEndpoint(resource.Resource):
                               "downloads": DownloadsEndpoint, "torrents": TorrentsEndpoint,
                               "multichain": MultichainEndpoint, "statistics": StatisticsEndpoint,
                               "state": StateEndpoint, "torrentinfo": TorrentInfoEndpoint,
-                              "shutdown": ShutdownEndpoint}
+                              "shutdown": ShutdownEndpoint, "debug": DebugEndpoint}
 
         for path, child_cls in child_handler_dict.iteritems():
             self.putChild(path, child_cls())

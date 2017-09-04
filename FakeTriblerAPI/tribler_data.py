@@ -95,7 +95,7 @@ class TriblerData:
 
         if CREATE_MY_CHANNEL:
             # Pick one of these channels as your channel
-            self.my_channel = randint(0, len(self.channels))
+            self.my_channel = randint(0, len(self.channels) - 1)
 
     def assign_subscribed_channels(self):
         # Make between 10 and 50 channels subscribed channels

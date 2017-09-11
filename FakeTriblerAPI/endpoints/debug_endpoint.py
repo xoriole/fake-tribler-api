@@ -11,8 +11,8 @@ class DebugEndpoint(resource.Resource):
         self.putChild("open_files", DebugOpenFilesEndpoint())
         self.putChild("open_sockets", DebugOpenSocketsEndpoint())
         self.putChild("threads", DebugThreadsEndpoint())
-        self.putChild("cpu_history", DebugCPUHistoryEndpoint())
-        self.putChild("memory_history", DebugMemoryHistoryEndpoint())
+        self.putChild("cpu", DebugCPUEndpoint())
+        self.putChild("memory", DebugMemoryEndpoint())
 
 
 class DebugOpenFilesEndpoint(resource.Resource):
@@ -39,6 +39,13 @@ class DebugThreadsEndpoint(resource.Resource):
             {"thread_id": 8784, "thread_name": "twisted", "frames": ['line 1', 'line 2']}]})
 
 
+class DebugCPUEndpoint(resource.Resource):
+
+    def __init__(self):
+        resource.Resource.__init__(self)
+        self.putChild("history", DebugCPUHistoryEndpoint())
+
+
 class DebugCPUHistoryEndpoint(resource.Resource):
 
     def render_GET(self, request):
@@ -51,6 +58,13 @@ class DebugCPUHistoryEndpoint(resource.Resource):
             {"time": now + 20, "cpu": 40},
             {"time": now + 25, "cpu": 30},
             {"time": now + 30, "cpu": 34}]})
+
+
+class DebugMemoryEndpoint(resource.Resource):
+
+    def __init__(self):
+        resource.Resource.__init__(self)
+        self.putChild("history", DebugMemoryHistoryEndpoint())
 
 
 class DebugMemoryHistoryEndpoint(resource.Resource):

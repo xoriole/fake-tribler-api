@@ -13,6 +13,7 @@ class DebugEndpoint(resource.Resource):
         self.putChild("threads", DebugThreadsEndpoint())
         self.putChild("cpu", DebugCPUEndpoint())
         self.putChild("memory", DebugMemoryEndpoint())
+        self.putChild("log", DebugLogEndpoint())
 
 
 class DebugOpenFilesEndpoint(resource.Resource):
@@ -79,3 +80,10 @@ class DebugMemoryHistoryEndpoint(resource.Resource):
             {"time": now + 20, "mem": 5175},
             {"time": now + 25, "mem": 5100},
             {"time": now + 30, "mem": 5150}]})
+
+
+class DebugLogEndpoint(resource.Resource):
+
+    def render_GET(self, request):
+        sample_logs = ''.join(["Sample log [%d]\n" % i for i in xrange(10)])
+        return json.dumps({"content": sample_logs, "max_lines": 10})

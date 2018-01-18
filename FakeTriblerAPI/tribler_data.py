@@ -48,6 +48,8 @@ class TriblerData:
         self.settings = {"settings": {
             "general": {
                 "family_filter": True,
+                "minport": 1234,
+                "log_dir": "/Users/tribleruser/log",
             },
             "video_server": {
                 "enabled": True,

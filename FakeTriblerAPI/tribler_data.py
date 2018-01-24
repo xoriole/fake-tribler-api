@@ -87,6 +87,10 @@ class TriblerData:
             },
             "search_community": {
                 "enabled": True,
+            },
+            "credit_mining": {
+                "enabled": True,
+                "sources": [],
             }
         }}
 

@@ -13,7 +13,6 @@ from FakeTriblerAPI.endpoints.statistics_endpoint import StatisticsEndpoint
 from FakeTriblerAPI.endpoints.torrentinfo_endpoint import TorrentInfoEndpoint
 from FakeTriblerAPI.endpoints.torrents_endpoint import TorrentsEndpoint
 from FakeTriblerAPI.endpoints.trustchain_endpoint import TrustchainEndpoint
-from FakeTriblerAPI.endpoints.variables_endpoint import VariablesEndpoint
 from FakeTriblerAPI.endpoints.settings_endpoint import SettingsEndpoint
 from FakeTriblerAPI.endpoints.wallets_endpoint import WalletsEndpoint
 
@@ -30,7 +29,7 @@ class RootEndpoint(resource.Resource):
         self.putChild("search", self.search_endpoint)
 
         child_handler_dict = {"channels": ChannelsEndpoint, "mychannel": MyChannelEndpoint,
-                              "settings": SettingsEndpoint, "variables": VariablesEndpoint,
+                              "settings": SettingsEndpoint,
                               "downloads": DownloadsEndpoint, "torrents": TorrentsEndpoint,
                               "trustchain": TrustchainEndpoint, "statistics": StatisticsEndpoint,
                               "state": StateEndpoint, "torrentinfo": TorrentInfoEndpoint,

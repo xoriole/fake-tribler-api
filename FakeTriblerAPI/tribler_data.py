@@ -92,6 +92,9 @@ class TriblerData:
                 "enabled": True,
                 "sources": [],
             }
+        },
+        "ports": {
+            "video_server~port": 1234
         }}
 
     # Generate channels from the random_channels file

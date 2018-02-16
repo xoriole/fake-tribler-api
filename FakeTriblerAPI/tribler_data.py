@@ -91,6 +91,7 @@ class TriblerData:
             "credit_mining": {
                 "enabled": True,
                 "sources": [],
+                "max_disk_space": 100,
             }
         },
         "ports": {

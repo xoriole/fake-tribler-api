@@ -79,6 +79,13 @@ class TriblerData:
                 "anonymity_enabled": True,
                 "safeseeding_enabled": True,
             },
+            "dispersy": {
+                "enabled": True,
+            },
+            "ipv8": {
+                "enabled": True,
+                "use_testnet": False,
+            },
             "trustchain": {
                 "enabled": True,
             },

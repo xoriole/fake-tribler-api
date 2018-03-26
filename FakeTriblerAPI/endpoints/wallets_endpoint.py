@@ -7,6 +7,7 @@ class WalletsEndpoint(resource.Resource):
     def render_GET(self, request):
         wallets = {"DUM1": {
             "created": True,
+            "unlocked": True,
             "name": "DUM1",
             "address": "DUMMYADDRESS1",
             "balance": {
@@ -14,6 +15,7 @@ class WalletsEndpoint(resource.Resource):
                 "pending": 0.0,
             }}, "DUM2": {
             "created": True,
+            "unlocked": True,
             "name": "DUM2",
             "address": "DUMMYADDRESS2",
             "balance": {

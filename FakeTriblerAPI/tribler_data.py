@@ -99,6 +99,9 @@ class TriblerData:
                 "enabled": True,
                 "sources": [],
                 "max_disk_space": 100,
+            },
+            "resource_monitor": {
+                "enabled": True
             }
         },
         "ports": {

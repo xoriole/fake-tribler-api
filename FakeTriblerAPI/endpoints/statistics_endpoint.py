@@ -70,7 +70,7 @@ class StatisticsCommunitiesEndpoint(resource.Resource):
     This class handles requests regarding Dispersy communities statistics.
     """
     def render_GET(self, request):
-        return json.dumps({'community_statistics': [{
+        return json.dumps({'dispersy_community_statistics': [{
             "identifier": ''.join(choice('0123456789abcdef') for _ in xrange(20)),
             "member": ''.join(choice('0123456789abcdef') for _ in xrange(20)),
             "classification": "Random1Community",

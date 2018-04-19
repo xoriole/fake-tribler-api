@@ -41,6 +41,7 @@ class DownloadEndpoint(resource.Resource):
     def __init__(self, infohash):
         resource.Resource.__init__(self)
         self.infohash = infohash
+        self.putChild("files", DownloadFilesEndpoint(self.infohash))
 
     def render_PATCH(self, request):
         download = tribler_utils.tribler_data.get_download_with_infohash(self.infohash)
@@ -78,3 +79,13 @@ class DownloadBaseEndpoint(resource.Resource):
         """
         request.setResponseCode(http.NOT_FOUND)
         return json.dumps({"error": message})
+
+
+class DownloadFilesEndpoint(DownloadBaseEndpoint):
+
+    def __init__(self, infohash):
+        DownloadBaseEndpoint.__init__(self, infohash)
+        self.infohash = infohash
+
+    def render_GET(self, _):
+        return json.dumps({"files": tribler_utils.tribler_data.downloads[0].files})

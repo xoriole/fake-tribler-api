@@ -1,4 +1,3 @@
-import base64
 import os
 from random import randint, sample
 from time import time
@@ -8,6 +7,7 @@ from FakeTriblerAPI.models.trustchain_block import TrustchainBlock
 from FakeTriblerAPI.models.order import Order
 from FakeTriblerAPI.models.tick import Tick
 from FakeTriblerAPI.models.transaction import Transaction
+from FakeTriblerAPI.utils.network import get_random_port
 from models.channel import Channel
 from models.download import Download
 from models.torrent import Torrent
@@ -31,6 +31,7 @@ class TriblerData:
         self.order_book = {}
         self.transactions = []
         self.orders = []
+        self.video_player_port = get_random_port()
 
     def generate(self):
         self.read_torrent_files()
@@ -45,68 +46,70 @@ class TriblerData:
         self.generate_orders()
 
         # Create settings
-        self.settings = {"settings": {
-            "general": {
-                "family_filter": True,
-                "minport": 1234,
-                "log_dir": "/Users/tribleruser/log",
+        self.settings = {
+            "settings": {
+                "general": {
+                    "family_filter": True,
+                    "minport": 1234,
+                    "log_dir": "/Users/tribleruser/log",
+                },
+                "video_server": {
+                    "enabled": True,
+                    "port": "-1",
+                },
+                "libtorrent": {
+                    "enabled": True,
+                    "port": 1234,
+                    "proxy_type": 0,
+                    "proxy_server": None,
+                    "proxy_auth": None,
+                    "utp": True,
+                    "max_upload_rate": 100,
+                    "max_download_rate": 200,
+                    "max_connections_download": 5,
+                },
+                "watch_folder": {
+                    "enabled": True,
+                    "directory": "/Users/tribleruser/watchfolder",
+                },
+                "download_defaults": {
+                    "seeding_mode": "ratio",
+                    "seeding_time": 60,
+                    "seeding_ratio": 2.0,
+                    "saveas": "bla",
+                    "number_hops": 1,
+                    "anonymity_enabled": True,
+                    "safeseeding_enabled": True,
+                },
+                "dispersy": {
+                    "enabled": True,
+                },
+                "ipv8": {
+                    "enabled": True,
+                    "use_testnet": False,
+                },
+                "trustchain": {
+                    "enabled": True,
+                },
+                "tunnel_community": {
+                    "exitnode_enabled": True,
+                },
+                "search_community": {
+                    "enabled": True,
+                },
+                "credit_mining": {
+                    "enabled": True,
+                    "sources": [],
+                    "max_disk_space": 100,
+                },
+                "resource_monitor": {
+                    "enabled": True
+                }
             },
-            "video_server": {
-                "enabled": True,
-                "port": "-1",
-            },
-            "libtorrent": {
-                "enabled": True,
-                "port": 1234,
-                "proxy_type": 0,
-                "proxy_server": None,
-                "proxy_auth": None,
-                "utp": True,
-                "max_upload_rate": 100,
-                "max_download_rate": 200,
-                "max_connections_download": 5,
-            },
-            "watch_folder": {
-                "enabled": True,
-                "directory": "/Users/tribleruser/watchfolder",
-            },
-            "download_defaults": {
-                "seeding_mode": "ratio",
-                "seeding_time": 60,
-                "seeding_ratio": 2.0,
-                "saveas": "bla",
-                "number_hops": 1,
-                "anonymity_enabled": True,
-                "safeseeding_enabled": True,
-            },
-            "dispersy": {
-                "enabled": True,
-            },
-            "ipv8": {
-                "enabled": True,
-                "use_testnet": False,
-            },
-            "trustchain": {
-                "enabled": True,
-            },
-            "tunnel_community": {
-                "exitnode_enabled": True,
-            },
-            "search_community": {
-                "enabled": True,
-            },
-            "credit_mining": {
-                "enabled": True,
-                "sources": [],
-                "max_disk_space": 100,
-            },
-            "resource_monitor": {
-                "enabled": True
+            "ports": {
+                "video_server~port": self.video_player_port
             }
-        },
-        "ports": {
-            "video_server~port": 1234
-        }}
+        }
 
     # Generate channels from the random_channels file
     def generate_channels(self):

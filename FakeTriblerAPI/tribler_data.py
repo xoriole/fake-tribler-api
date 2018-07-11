@@ -201,6 +201,11 @@ class TriblerData:
         bid_ticks = [Tick('DUM1', 'DUM2', is_ask=False) for _ in xrange(randint(20, 50))]
         self.order_book = {'asks': ask_ticks, 'bids': bid_ticks}
 
+    def get_transaction(self, trader_id, tx_number):
+        for transaction in self.transactions:
+            if transaction.trader_id == trader_id and transaction.transaction_number == tx_number:
+                return transaction
+
     def generate_transactions(self):
         self.transactions = [Transaction('DUM1', 'DUM2') for _ in xrange(randint(20, 50))]
 

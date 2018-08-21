@@ -63,7 +63,7 @@ class DownloadEndpoint(resource.Resource):
                 request.setResponseCode(http.BAD_REQUEST)
                 return json.dumps({"error": "unknown state parameter"})
 
-        return json.dumps({"modified": True})
+        return json.dumps({"modified": True, "infohash": self.infohash})
 
 
 class DownloadBaseEndpoint(resource.Resource):

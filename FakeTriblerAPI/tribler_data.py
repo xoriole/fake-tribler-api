@@ -11,6 +11,7 @@ from FakeTriblerAPI.utils.network import get_random_port
 from models.channel import Channel
 from models.download import Download
 from models.torrent import Torrent
+from models.tunnel import Circuit, Relay, Exit
 
 
 CREATE_MY_CHANNEL = True
@@ -44,6 +45,8 @@ class TriblerData:
         self.generate_order_book()
         self.generate_transactions()
         self.generate_orders()
+        self.generate_dht_stats()
+        self.generate_tunnels()
 
         # Create settings
         self.settings = {
@@ -211,3 +214,20 @@ class TriblerData:
 
     def generate_orders(self):
         self.orders = [Order('DUM1', 'DUM2') for _ in xrange(randint(20, 50))]
+
+    def generate_dht_stats(self):
+        self.dht_stats = {
+            "num_tokens": randint(10, 50),
+            "routing_table_buckets": randint(1, 10),
+            "num_keys_in_store": randint(100, 500),
+            "num_store_for_me": {os.urandom(20).encode('hex'): randint(1, 8)},
+            "num_peers_in_store": {},
+            "node_id": os.urandom(20).encode('hex'),
+            "peer_id": os.urandom(20).encode('hex'),
+            "routing_table_size": randint(10, 50)
+	    }
+
+    def generate_tunnels(self):
+        self.tunnel_circuits = [Circuit() for _ in xrange(randint(2, 10))]
+        self.tunnel_relays = [Relay() for _ in xrange(randint(2, 10))]
+        self.tunnel_exits = [Exit() for _ in xrange(randint(2, 10))]

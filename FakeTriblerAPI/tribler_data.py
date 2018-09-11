@@ -1,4 +1,3 @@
-import base64
 import os
 from random import randint, sample
 from time import time
@@ -8,9 +7,11 @@ from FakeTriblerAPI.models.trustchain_block import TrustchainBlock
 from FakeTriblerAPI.models.order import Order
 from FakeTriblerAPI.models.tick import Tick
 from FakeTriblerAPI.models.transaction import Transaction
+from FakeTriblerAPI.utils.network import get_random_port
 from models.channel import Channel
 from models.download import Download
 from models.torrent import Torrent
+from models.tunnel import Circuit, Relay, Exit
 
 
 CREATE_MY_CHANNEL = True
@@ -31,6 +32,7 @@ class TriblerData:
         self.order_book = {}
         self.transactions = []
         self.orders = []
+        self.video_player_port = get_random_port()
 
     def generate(self):
         self.read_torrent_files()
@@ -43,67 +45,74 @@ class TriblerData:
         self.generate_order_book()
         self.generate_transactions()
         self.generate_orders()
+        self.generate_dht_stats()
+        self.generate_tunnels()
 
         # Create settings
-        self.settings = {"settings": {
-            "general": {
-                "family_filter": True,
-                "minport": 1234,
-                "log_dir": "/Users/tribleruser/log",
+        self.settings = {
+            "settings": {
+                "general": {
+                    "family_filter": True,
+                    "minport": 1234,
+                    "log_dir": "/Users/tribleruser/log",
+                },
+                "video_server": {
+                    "enabled": True,
+                    "port": "-1",
+                },
+                "libtorrent": {
+                    "enabled": True,
+                    "port": 1234,
+                    "proxy_type": 0,
+                    "proxy_server": None,
+                    "proxy_auth": None,
+                    "utp": True,
+                    "max_upload_rate": 100,
+                    "max_download_rate": 200,
+                    "max_connections_download": 5,
+                },
+                "watch_folder": {
+                    "enabled": True,
+                    "directory": "/Users/tribleruser/watchfolder",
+                },
+                "download_defaults": {
+                    "seeding_mode": "ratio",
+                    "seeding_time": 60,
+                    "seeding_ratio": 2.0,
+                    "saveas": "bla",
+                    "number_hops": 1,
+                    "anonymity_enabled": True,
+                    "safeseeding_enabled": True,
+                },
+                "dispersy": {
+                    "enabled": True,
+                },
+                "ipv8": {
+                    "enabled": True,
+                    "use_testnet": False,
+                },
+                "trustchain": {
+                    "enabled": True,
+                },
+                "tunnel_community": {
+                    "exitnode_enabled": True,
+                },
+                "search_community": {
+                    "enabled": True,
+                },
+                "credit_mining": {
+                    "enabled": True,
+                    "sources": [],
+                    "max_disk_space": 100,
+                },
+                "resource_monitor": {
+                    "enabled": True
+                }
             },
-            "video_server": {
-                "enabled": True,
-                "port": "-1",
-            },
-            "libtorrent": {
-                "enabled": True,
-                "port": 1234,
-                "proxy_type": 0,
-                "proxy_server": None,
-                "proxy_auth": None,
-                "utp": True,
-                "max_upload_rate": 100,
-                "max_download_rate": 200,
-                "max_connections_download": 5,
-            },
-            "watch_folder": {
-                "enabled": True,
-                "directory": "/Users/tribleruser/watchfolder",
-            },
-            "download_defaults": {
-                "seeding_mode": "ratio",
-                "seeding_time": 60,
-                "seeding_ratio": 2.0,
-                "saveas": "bla",
-                "number_hops": 1,
-                "anonymity_enabled": True,
-                "safeseeding_enabled": True,
-            },
-            "dispersy": {
-                "enabled": True,
-            },
-            "ipv8": {
-                "enabled": True,
-                "use_testnet": False,
-            },
-            "trustchain": {
-                "enabled": True,
-            },
-            "tunnel_community": {
-                "exitnode_enabled": True,
-            },
-            "search_community": {
-                "enabled": True,
-            },
-            "credit_mining": {
-                "enabled": True,
-                "sources": [],
-                "max_disk_space": 100,
+            "ports": {
+                "video_server~port": self.video_player_port
             }
-        },
-        "ports": {
-            "video_server~port": 1234
-        }}
+        }
 
     # Generate channels from the random_channels file
     def generate_channels(self):
@@ -195,8 +204,30 @@ class TriblerData:
         bid_ticks = [Tick('DUM1', 'DUM2', is_ask=False) for _ in xrange(randint(20, 50))]
         self.order_book = {'asks': ask_ticks, 'bids': bid_ticks}
 
+    def get_transaction(self, trader_id, tx_number):
+        for transaction in self.transactions:
+            if transaction.trader_id == trader_id and transaction.transaction_number == tx_number:
+                return transaction
+
     def generate_transactions(self):
         self.transactions = [Transaction('DUM1', 'DUM2') for _ in xrange(randint(20, 50))]
 
     def generate_orders(self):
         self.orders = [Order('DUM1', 'DUM2') for _ in xrange(randint(20, 50))]
+
+    def generate_dht_stats(self):
+        self.dht_stats = {
+            "num_tokens": randint(10, 50),
+            "routing_table_buckets": randint(1, 10),
+            "num_keys_in_store": randint(100, 500),
+            "num_store_for_me": {os.urandom(20).encode('hex'): randint(1, 8)},
+            "num_peers_in_store": {},
+            "node_id": os.urandom(20).encode('hex'),
+            "peer_id": os.urandom(20).encode('hex'),
+            "routing_table_size": randint(10, 50)
+	    }
+
+    def generate_tunnels(self):
+        self.tunnel_circuits = [Circuit() for _ in xrange(randint(2, 10))]
+        self.tunnel_relays = [Relay() for _ in xrange(randint(2, 10))]
+        self.tunnel_exits = [Exit() for _ in xrange(randint(2, 10))]

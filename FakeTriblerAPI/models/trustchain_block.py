@@ -18,6 +18,7 @@ class TrustchainBlock:
         self.previous_hash = 'c' * 20
         self.signature = 'd' * 20
         self.insert_time = datetime.datetime.fromtimestamp(int(timestamp)).strftime('%Y-%m-%d %H:%M:%S')
+        self.type = 'tribler_bandwidth'
 
     def to_dictionary(self):
         return {
@@ -34,4 +35,5 @@ class TrustchainBlock:
             "signature": self.signature.encode("hex"),
             "insert_time": self.insert_time,
             "hash": ('e' * 20).encode("hex"),
+            "type": self.type
         }

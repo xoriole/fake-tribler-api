@@ -90,6 +90,7 @@ class TriblerData:
                 "ipv8": {
                     "enabled": True,
                     "use_testnet": False,
+                    "statistics": True
                 },
                 "trustchain": {
                     "enabled": True,

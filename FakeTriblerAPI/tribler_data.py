@@ -108,6 +108,10 @@ class TriblerData:
                 },
                 "resource_monitor": {
                     "enabled": True
+                },
+                "chant": {
+                    "enabled": True,
+                    "channel_edit": True
                 }
             },
             "ports": {

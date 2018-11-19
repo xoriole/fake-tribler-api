@@ -7,7 +7,7 @@ from FakeTriblerAPI.models.download_peer import DownloadPeer
 
 class Download:
 
-    def __init__(self, torrent):
+    def __init__(self, torrent, is_credit_mining=False, is_channel_download=False):
         self.torrent = torrent
         self.status = randint(0, 8)
         self.anon = True if randint(0, 1) == 0 else False
@@ -31,6 +31,8 @@ class Download:
         self.total_pieces = randint(100, 2000)
         self.has_pieces = [False] * self.total_pieces
         self.time_added = randint(1400000000, 1484819242)
+        self.is_credit_mining = is_credit_mining
+        self.is_channel_download = is_channel_download
 
         # Set some pieces to True
         for _ in xrange(self.total_pieces / 2):
@@ -62,8 +64,9 @@ class Download:
                     "destination": self.destination, "availability": self.availability,
                     "total_pieces": self.total_pieces, "total_up": self.total_up, "total_down": self.total_down,
                     "ratio": self.ratio, "error": "unknown", "time_added": self.time_added, "vod_mode": False,
-                    "vod_prebuffering_progress_consec": 0.34, "credit_mining": False,
-                    "num_connected_peers": self.num_connected_peers, "num_connected_seeds": self.num_connected_seeds}
+                    "vod_prebuffering_progress_consec": 0.34, "credit_mining": self.is_credit_mining,
+                    "num_connected_peers": self.num_connected_peers, "num_connected_seeds": self.num_connected_seeds,
+                    "channel_download": self.is_channel_download}
 
         if get_peers:
             download["peers"] = [peer.get_info_dict() for peer in self.peers]

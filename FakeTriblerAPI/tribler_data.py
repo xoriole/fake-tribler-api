@@ -193,6 +193,16 @@ class TriblerData:
         for _ in xrange(randint(10, 30)):
             self.start_random_download()
 
+        # Start some credit mining downloads
+        for _ in xrange(randint(1, 5)):
+            random_torrent = sample(self.torrents, 1)[0]
+            self.downloads.append(Download(random_torrent, is_credit_mining=True))
+
+        # Start some channel downloads
+        for _ in xrange(randint(1, 5)):
+            random_torrent = sample(self.torrents, 1)[0]
+            self.downloads.append(Download(random_torrent, is_channel_download=True))
+
     def generate_trustchain_blocks(self):
         # Generate a chain of 100 blocks
         my_id = 'a' * 20

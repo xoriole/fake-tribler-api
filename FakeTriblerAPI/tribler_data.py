@@ -185,11 +185,23 @@ class TriblerData:
             if download.torrent.infohash == infohash:
                 return download
 
-    def start_random_download(self):
+    def start_random_download(self, media=False):
         random_torrent = sample(self.torrents, 1)[0]
-        self.downloads.append(Download(random_torrent))
+        download = Download(random_torrent)
+        if media:
+            download.files.append({
+                "name": "video.avi",
+                "size": randint(1000, 10000000),
+                "progress": 1.0,
+                "included": True,
+                "index": 0
+            })
+        self.downloads.append(download)
 
     def generate_downloads(self):
+        # Make sure the first download is a media file (so we can play it)
+        self.start_random_download(media=True)
+
         for _ in xrange(randint(10, 30)):
             self.start_random_download()
 

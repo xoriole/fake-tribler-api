@@ -1,5 +1,5 @@
 import os
-from random import randint, sample
+from random import randint, sample, choice
 from time import time
 
 import FakeTriblerAPI
@@ -7,6 +7,7 @@ from FakeTriblerAPI.models.trustchain_block import TrustchainBlock
 from FakeTriblerAPI.models.order import Order
 from FakeTriblerAPI.models.tick import Tick
 from FakeTriblerAPI.models.transaction import Transaction
+from FakeTriblerAPI.utils import get_random_filename, get_random_hex_string
 from FakeTriblerAPI.utils.network import get_random_port
 from models.channel import Channel
 from models.download import Download
@@ -22,7 +23,6 @@ class TriblerData:
     def __init__(self):
         self.channels = []
         self.torrents = []
-        self.torrent_files = {}
         self.subscribed_channels = set()
         self.downloads = []
         self.my_channel = -1
@@ -32,10 +32,10 @@ class TriblerData:
         self.order_book = {}
         self.transactions = []
         self.orders = []
+        self.dht_stats = {}
         self.video_player_port = get_random_port()
 
     def generate(self):
-        self.read_torrent_files()
         self.generate_torrents()
         self.generate_channels()
         self.assign_subscribed_channels()
@@ -137,29 +137,18 @@ class TriblerData:
             self.subscribed_channels.add(channel_index)
             self.channels[channel_index].subscribed = True
 
-    def read_torrent_files(self):
-        with open(os.path.join(os.path.dirname(FakeTriblerAPI.__file__), "data", "torrent_files.dat")) \
-                as torrent_files_file:
-            content = torrent_files_file.readlines()
-            for torrent_file_line in content:
-                parts = torrent_file_line.split("\t")
-                torrent_id = parts[0]
-                if torrent_id not in self.torrent_files:
-                    self.torrent_files[torrent_id] = []
-                self.torrent_files[torrent_id].append({"path": parts[1], "length": parts[2]})
-
     def generate_torrents(self):
         # Create random torrents in channels
-        with open(os.path.join(os.path.dirname(FakeTriblerAPI.__file__), "data", "random_torrents.dat"))\
-                as random_torrents:
-            content = random_torrents.readlines()
-            for random_torrent in content:
-                random_torrent = random_torrent.rstrip()
-                torrent_parts = random_torrent.split("\t")
-                torrent = Torrent(*torrent_parts)
-                if torrent_parts[0] in self.torrent_files:
-                    torrent.files = self.torrent_files[torrent_parts[0]]
-                self.torrents.append(torrent)
+        for _ in xrange(1000):
+            infohash = get_random_hex_string(40).decode('hex')
+            name = get_random_filename()
+            categories = ['document', 'audio', 'video', 'xxx']
+            torrent = Torrent(infohash, name, randint(1024, 1024 * 3000), choice(categories))
+
+            # Create the files
+            for _ in xrange(randint(1, 20)):
+                torrent.files.append({"path": get_random_filename(), "length": randint(1024, 1024 * 3000)})
+            self.torrents.append(torrent)
 
     def generate_rss_feeds(self):
         for i in range(randint(10, 30)):
@@ -252,7 +241,7 @@ class TriblerData:
             "node_id": os.urandom(20).encode('hex'),
             "peer_id": os.urandom(20).encode('hex'),
             "routing_table_size": randint(10, 50)
-	    }
+        }
 
     def generate_tunnels(self):
         self.tunnel_circuits = [Circuit() for _ in xrange(randint(2, 10))]

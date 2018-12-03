@@ -57,16 +57,36 @@ class Download:
         return base64.b64encode(encoded_str)
 
     def get_json(self, get_peers=False, get_pieces=False):
-        download = {"name": self.torrent.name, "infohash": self.torrent.infohash, "status": DLSTATUS_STRINGS[self.status],
-                    "num_peers": self.num_peers, "num_seeds": self.seeds, "progress": self.progress,
-                    "size": self.torrent.length, "speed_down": self.down_speed, "speed_up": self.up_speed, "eta": 1234,
-                    "hops": self.anon_hops, "anon_download": self.anon, "files": self.files, "trackers": self.trackers,
-                    "destination": self.destination, "availability": self.availability,
-                    "total_pieces": self.total_pieces, "total_up": self.total_up, "total_down": self.total_down,
-                    "ratio": self.ratio, "error": "unknown", "time_added": self.time_added, "vod_mode": False,
-                    "vod_prebuffering_progress_consec": 0.34, "credit_mining": self.is_credit_mining,
-                    "num_connected_peers": self.num_connected_peers, "num_connected_seeds": self.num_connected_seeds,
-                    "channel_download": self.is_channel_download}
+        download = {
+            "name": self.torrent.name,
+            "infohash": self.torrent.infohash.encode('hex'),
+            "status": DLSTATUS_STRINGS[self.status],
+            "num_peers": self.num_peers,
+            "num_seeds": self.seeds,
+            "progress": self.progress,
+            "size": self.torrent.length,
+            "speed_down": self.down_speed,
+            "speed_up": self.up_speed,
+            "eta": 1234,
+            "hops": self.anon_hops,
+            "anon_download": self.anon,
+            "files": self.files,
+            "trackers": self.trackers,
+            "destination": self.destination,
+            "availability": self.availability,
+            "total_pieces": self.total_pieces,
+            "total_up": self.total_up,
+            "total_down": self.total_down,
+            "ratio": self.ratio,
+            "error": "unknown",
+            "time_added": self.time_added,
+            "vod_mode": False,
+            "vod_prebuffering_progress_consec": 0.34,
+            "credit_mining": self.is_credit_mining,
+            "num_connected_peers": self.num_connected_peers,
+            "num_connected_seeds": self.num_connected_seeds,
+            "channel_download": self.is_channel_download
+        }
 
         if get_peers:
             download["peers"] = [peer.get_info_dict() for peer in self.peers]

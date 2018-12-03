@@ -31,7 +31,6 @@ class MyChannelEndpoint(MyChannelBaseEndpoint):
 
     def render_PUT(self, request):
         parameters = http.parse_qs(request.content.read(), 1)
-        print parameters
         channel_name = parameters['name'][0]
         channel_description = parameters['description'][0]
 

@@ -217,7 +217,7 @@ class ChannelsModifyPlaylistTorrentsEndpoint(BaseChannelsEndpoint):
         BaseChannelsEndpoint.__init__(self)
         self.cid = cid
         self.playlist_id = playlist_id
-        self.infohash = infohash
+        self.infohash = infohash.decode('hex')
 
     def render_PUT(self, request):
         channel = tribler_utils.tribler_data.get_channel_with_cid(self.cid)

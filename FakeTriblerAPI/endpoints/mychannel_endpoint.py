@@ -64,6 +64,6 @@ class MyChannelTorrentsEndpoint(resource.Resource):
         request.setHeader('Content-Type', 'text/json')
         torrent_list = []
         for torrent in my_channel.torrents:
-            torrent_list.append({'name': torrent.name, 'infohash': torrent.infohash, 'added': torrent.time_added})
+            torrent_list.append({'name': torrent.name, 'infohash': torrent.infohash.encode('hex'), 'added': torrent.time_added})
 
         return json.dumps({"torrents": torrent_list})

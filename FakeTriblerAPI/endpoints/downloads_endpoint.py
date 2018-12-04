@@ -40,7 +40,7 @@ class DownloadEndpoint(resource.Resource):
 
     def __init__(self, infohash):
         resource.Resource.__init__(self)
-        self.infohash = infohash
+        self.infohash = infohash.decode('hex')
         self.putChild("files", DownloadFilesEndpoint(self.infohash))
 
     def render_PATCH(self, request):
@@ -63,7 +63,7 @@ class DownloadEndpoint(resource.Resource):
                 request.setResponseCode(http.BAD_REQUEST)
                 return json.dumps({"error": "unknown state parameter"})
 
-        return json.dumps({"modified": True, "infohash": self.infohash})
+        return json.dumps({"modified": True, "infohash": self.infohash.encode('hex')})
 
 
 class DownloadBaseEndpoint(resource.Resource):
@@ -88,4 +88,4 @@ class DownloadFilesEndpoint(DownloadBaseEndpoint):
         self.infohash = infohash
 
     def render_GET(self, _):
-        return json.dumps({"files": tribler_utils.tribler_data.downloads[0].files})
+        return json.dumps({"files": tribler_utils.tribler_data.get_download_with_infohash(self.infohash).files})

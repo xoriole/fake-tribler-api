@@ -24,13 +24,9 @@ class StatisticsTriblerEndpoint(resource.Resource):
     """
     def render_GET(self, request):
         return json.dumps({'tribler_statistics': {
-            "num_channels": randint(5, 100),
-            "database_size": randint(1000, 1000000),
-            "torrents": {
-                "num_collected": randint(5, 100),
-                "total_size": randint(1000, 100000),
-                "num_files": randint(5, 100)
-            }
+            "db_size": randint(1000, 1000000),
+            "num_channels": randint(1, 100),
+            "num_torrents": randint(1000, 10000)
         }})
 
 

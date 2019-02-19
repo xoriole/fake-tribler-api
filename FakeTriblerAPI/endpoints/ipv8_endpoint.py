@@ -1,4 +1,6 @@
 import json
+from random import choice, randint
+
 from twisted.web import resource
 
 from FakeTriblerAPI import tribler_utils
@@ -11,6 +13,7 @@ class IPv8Endpoint(resource.Resource):
         self.putChild("trustchain", IPv8TrustChainEndpoint())
         self.putChild("tunnel", IPv8TunnelEndpoint())
         self.putChild("dht", IPv8DHTEndpoint())
+        self.putChild("overlays", IPv8OverlaysEndpoint())
 
 
 class IPv8TrustChainEndpoint(resource.Resource):
@@ -77,3 +80,15 @@ class IPv8DHTStatisticsEndpoint(resource.Resource):
 
     def render_GET(self, request):
         return json.dumps({"statistics": tribler_utils.tribler_data.dht_stats})
+
+
+class IPv8OverlaysEndpoint(resource.Resource):
+
+    def render_GET(self, request):
+        return json.dumps({'overlays': [{
+            "master_peer": ''.join(choice('0123456789abcdef') for _ in xrange(20)),
+            "my_peer": ''.join(choice('0123456789abcdef') for _ in xrange(20)),
+            "global_time": randint(1, 10000),
+            "peers": [],
+            "overlay_name": "TestOverlay"
+        }]})

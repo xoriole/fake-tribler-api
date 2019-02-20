@@ -12,8 +12,7 @@ class StatisticsEndpoint(resource.Resource):
     def __init__(self):
         resource.Resource.__init__(self)
 
-        child_handler_dict = {"tribler": StatisticsTriblerEndpoint, "ipv8": StatisticsIPv8Endpoint,
-                              "communities": StatisticsCommunitiesEndpoint}
+        child_handler_dict = {"tribler": StatisticsTriblerEndpoint, "ipv8": StatisticsIPv8Endpoint}
 
         for path, child_cls in child_handler_dict.iteritems():
             self.putChild(path, child_cls())
@@ -44,17 +43,3 @@ class StatisticsIPv8Endpoint(resource.Resource):
             "total_up": 13423,
             "total_down": 3252
         }})
-
-
-class StatisticsCommunitiesEndpoint(resource.Resource):
-    """
-    This class handles requests regarding IPv8 communities statistics.
-    """
-    def render_GET(self, request):
-        return json.dumps({'ipv8_overlay_statistics': [{
-            "master_peer": ''.join(choice('0123456789abcdef') for _ in xrange(20)),
-            "my_peer": ''.join(choice('0123456789abcdef') for _ in xrange(20)),
-            "global_time": randint(1, 10000),
-            "peers": [],
-            "overlay_name": "TestOverlay"
-        }]})
